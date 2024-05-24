@@ -1,12 +1,12 @@
 
-import "package:test/product.dart";
+import "package:test/tables/product.dart";
 class vendor {
   final String id;
   final String name;
   final String email;
   final String phoneNumber;
   final String address;
-  final List<product> products; // List of products listed by the vendor
+  final List<product> products; 
 
   vendor({
     required this.id,

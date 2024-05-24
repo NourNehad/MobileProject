@@ -1,6 +1,6 @@
 
-import "package:test/product.dart";
-import "package:test/shopper.dart";
+import "package:test/tables/product.dart";
+import "package:test/tables/shopper.dart";
 
 
 class order {

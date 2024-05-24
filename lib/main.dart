@@ -2,12 +2,18 @@
 import 'package:firebase_auth/firebase_auth.dart'; 
 import 'package:firebase_core/firebase_core.dart'; 
 import 'package:flutter/material.dart';
-import 'package:test/LoadingScreen.dart';
-import 'package:test/LoginScreen.dart';
-import 'package:test/ProductScreen.dart'; 
-import 'ErrorScreen.dart';
+import 'package:test/errorHandling/loadingScreen.dart';
+import 'package:test/loginScreen.dart';
+import 'package:test/products/allProducts.dart';
+import 'package:test/products/productScreen.dart';
+import 'package:test/vendor/vendorProvider.dart'; 
+import 'errorHandling/errorScreen.dart';
 import 'package:test/firebase_options.dart';
- 
+ import 'package:flutter/material.dart';
+ import 'package:test/drawer_wrapper.dart';
+import 'package:provider/provider.dart';
+
+
 void main() async { 
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
@@ -53,34 +59,39 @@ bool _initialized = false;
     super.initState(); 
     initializeFlutterFire(); 
   } 
-@override 
-  Widget build(BuildContext context) { 
-     
-    return MaterialApp( 
-      title: 'Flutter Demo', 
-      theme: ThemeData( 
-      primarySwatch: Colors.blue, 
-      ), 
-      home: _error
-      ? ErrorScreen()
-      :_initialized!=true  
-        ? LoadingScreen()  
-        : StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(),  
-              builder: (ctx, userSnapshot) { 
-          if (userSnapshot.connectionState == ConnectionState.waiting) { 
-             
-            return LoadingScreen(); 
-          } 
-          if (userSnapshot.hasData) { 
-             // the snapshot returned from the auth sdk has something inside means user is authenticated 
-            return ProductScreen(); 
-          } 
-          return LoginScreen(); 
-   
-   
-   }) 
-    ); 
-  } 
-   
- 
+@override
+Widget build(BuildContext context) {
+
+  return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => VendorProvider()),
+      ],
+
+  child : MaterialApp(
+    title: 'Flutter Demo',
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+    ),
+    home: Scaffold(
+      body: _error
+          ? errorScreen()
+          : !_initialized
+              ? loadingScreen()
+              : StreamBuilder(
+                  stream: FirebaseAuth.instance.authStateChanges(),
+                  builder: (ctx, userSnapshot) {
+                    if (userSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return loadingScreen();
+                    }
+                    if (userSnapshot.hasData) {
+                      return allProducts();
+                    }
+                    return loginScreen();
+                  },
+                ),
+    ),
+  )
+  );
+}
 }
