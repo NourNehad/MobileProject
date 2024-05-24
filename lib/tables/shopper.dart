@@ -1,14 +1,14 @@
 
-import "package:test/comment.dart";
-import "package:test/order.dart";
+import "package:test/tables/comment.dart";
+import "package:test/tables/order.dart";
 
 
 class shopper {
    String id;
    String name;
    String email;
-   List<comment> comments; // List of comments made by the shopper
-   List<order> orders; // List of orders made by the shopper
+   List<comment> comments; 
+   List<order> orders; 
 
   shopper({
     required this.id,

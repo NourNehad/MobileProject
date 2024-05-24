@@ -1,3 +1,13 @@
+
+enum ProductCategory {
+  Necklace,
+  Ring,
+  Bracelet,
+  Earring,
+  Watch,
+  Other,
+}
+
 class product {
   String id;
   String title;
@@ -6,6 +16,8 @@ class product {
   String imageUrl;
   String vendorid;
   DateTime timeCreated;
+  List<double> ratings;
+   ProductCategory Category;
 
 product({
     required this.id,
@@ -14,6 +26,8 @@ product({
     required this.price,
     required this.imageUrl,
     required this.vendorid,
-    required this.timeCreated
+    required this.timeCreated,
+    required this.Category,
+    this.ratings= const [],
 });
 }
