@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:test/vendor/requestVendorScreen.dart'; // Import the new screen
+import 'package:firebase_storage/firebase_storage.dart'; // Import Firebase Storage
 
 class productScreen extends StatefulWidget {
   @override
@@ -15,8 +15,8 @@ class _ProductScreenState extends State<productScreen> {
   final TextEditingController priceController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   String imageUrl = '';
-  String category = 'Necklace'; // Default category
-
+  String category = 'Necklace'; 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,9 +80,19 @@ class _ProductScreenState extends State<productScreen> {
     final ImagePicker _picker = ImagePicker();
     final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      setState(() {
-        imageUrl = pickedImage.path;
-      });
+      final File file = File(pickedImage.path);
+      String fileName = pickedImage.name;
+      try {
+        TaskSnapshot snapshot = await FirebaseStorage.instance
+            .ref('product_images/$fileName')
+            .putFile(file);
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        setState(() {
+          imageUrl = downloadUrl;
+        });
+      } catch (e) {
+        print('Error uploading image: $e');
+      }
     }
   }
 
