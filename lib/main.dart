@@ -7,9 +7,11 @@ import 'package:test/loginScreen.dart';
 import 'package:test/products/allProducts.dart';
 import 'package:test/products/productScreen.dart';
 import 'package:test/vendor/vendorProvider.dart'; 
-import 'package:test/errorHandling/errorScreen.dart';
+import 'cart/cartScreen.dart';
+import 'errorHandling/errorScreen.dart';
 import 'package:test/firebase_options.dart';
 import 'package:test/drawer_wrapper.dart';
+import 'cart/cartProvider.dart';
 
 void main() async { 
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +62,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => VendorProvider()),
+        ChangeNotifierProvider(create: (_) => cartProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -74,7 +77,8 @@ class _MyAppState extends State<MyApp> {
                   : StreamBuilder(
                       stream: FirebaseAuth.instance.authStateChanges(),
                       builder: (ctx, userSnapshot) {
-                        if (userSnapshot.connectionState == ConnectionState.waiting) {
+                        if (userSnapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return loadingScreen();
                         }
                         if (userSnapshot.hasData) {
@@ -84,6 +88,11 @@ class _MyAppState extends State<MyApp> {
                       },
                     ),
         ),
+        routes: {
+          '/cart': (context) => cartScreen(),
+          '/allProducts': (context) => allProducts(),
+          '/productScreen': (context) => productScreen(),
+        },
       ),
     );
   }
