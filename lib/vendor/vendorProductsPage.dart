@@ -130,8 +130,7 @@ class EditProductScreen extends StatelessWidget {
 
   EditProductScreen({required this.productId, required this.productData});
 
-
-     void _triggerNotification(BuildContext context, String title, double discountPercentage) {
+  void _triggerNotification(BuildContext context, String title, double discountPercentage) {
     var currentUser = FirebaseAuth.instance.currentUser;
     var vendorName = currentUser != null ? currentUser.displayName ?? 'Vendor' : 'Vendor';
     var notificationMessage = '$vendorName made a discount of ${discountPercentage.toStringAsFixed(2)}% on $title';
@@ -152,12 +151,11 @@ class EditProductScreen extends StatelessWidget {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     var titleController = TextEditingController(text: productData['title']);
     var priceController = TextEditingController(text: productData['price'].toString());
-    var oldPrice = productData['price'] as double;
+    var oldPrice = productData['price'] is String ? double.parse(productData['price']) : productData['price'];
 
     return Scaffold(
       appBar: AppBar(
@@ -199,6 +197,4 @@ class EditProductScreen extends StatelessWidget {
       ),
     );
   }
-
-  
 }

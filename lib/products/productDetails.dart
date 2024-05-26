@@ -1,22 +1,24 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:test/cart/cartProvider.dart';
 import 'package:test/vendor/vendorProvider.dart';
+import 'package:test/notification_service_stub.dart';
 
 class productDetails extends StatelessWidget {
   final String productId;
   final TextEditingController _commentController = TextEditingController();
-  String username ='';
+  String username = '';
 
   productDetails({required this.productId});
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<VendorProvider>(context);
-     bool isAuth = authProvider.isAuth;
-     username = authProvider.username;
+    bool isAuth = authProvider.isAuth;
+    username = authProvider.username;
 
     final CartProvider = Provider.of<cartProvider>(context, listen: false);
 
@@ -87,8 +89,6 @@ class productDetails extends StatelessWidget {
                         if (isAuth) {
                           addRating(productId, rating, product['title']);
                         } else {
-
-                        
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('You must be logged in to rate.')),
                           );
@@ -128,7 +128,7 @@ class productDetails extends StatelessWidget {
                 SizedBox(height: 16),
                 Divider(),
                 Expanded(
-                  child: CommentsSection(productId: productId, isAuth: isAuth , productTitle:  product['title']),
+                  child: CommentsSection(productId: productId, isAuth: isAuth, productTitle: product['title']),
                 ),
               ],
             ),
@@ -138,7 +138,7 @@ class productDetails extends StatelessWidget {
     );
   }
 
-    void addRating(String productId, double rating, String productTitle) async {
+  void addRating(String productId, double rating, String productTitle) async {
     final productRef = FirebaseFirestore.instance.collection('products').doc(productId);
 
     await productRef.update({
@@ -163,15 +163,15 @@ class CommentsSection extends StatelessWidget {
   final bool isAuth;
   final String productTitle;
   final TextEditingController _commentController = TextEditingController();
-  String username ='';
+  String username = '';
 
   CommentsSection({required this.productId, required this.isAuth, required this.productTitle});
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<VendorProvider>(context);
-     bool isAuth = authProvider.isAuth;
-     username = authProvider.username;
+    bool isAuth = authProvider.isAuth;
+    username = authProvider.username;
     var currentUser = FirebaseAuth.instance.currentUser;
 
     return Column(
@@ -238,8 +238,7 @@ class CommentsSection extends StatelessWidget {
                         productId,
                         currentUser!.uid,
                         username,
-                        _commentController.text ,
-
+                        _commentController.text,
                       );
                       _commentController.clear();
                     }
@@ -272,6 +271,20 @@ class CommentsSection extends StatelessWidget {
       'message': notificationMessage,
       'timestamp': DateTime.now(),
     });
+
+    // Send push notification
+    sendPushNotification(notificationMessage);
+  }
+
+  void sendPushNotification(String message) {
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
+        channelKey: 'basic_channel',
+        title: 'New Comment',
+        body: message,
+      ),
+    );
   }
 }
 
