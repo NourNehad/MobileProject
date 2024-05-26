@@ -25,6 +25,10 @@ class _CartScreenState extends State<cartScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('My Cart'),
+        centerTitle: true, // Center the title
+        backgroundColor: Colors.green, // Set the AppBar color to green
+        iconTheme: IconThemeData(color: Colors.white), // Set the back button color to white
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), // Set the title text to white
       ),
       body: FutureBuilder<Map<String, Map<String, dynamic>>>(
         future: _cartItemsFuture,
@@ -46,15 +50,8 @@ class _CartScreenState extends State<cartScreen> {
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
+                    border: Border.all(color: Colors.grey), // Add border
                     borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
                   ),
                   child: ListTile(
                     title: Text(productData['title']),
@@ -85,7 +82,8 @@ class _CartScreenState extends State<cartScreen> {
             MaterialPageRoute(builder: (context) => orderDetailsScreen()),
           );
         },
-        child: const Icon(Icons.shopping_cart),
+        backgroundColor: Colors.green, // Set FloatingActionButton color to green
+        child: const Icon(Icons.shopping_cart, color: Colors.white), // Set the icon color to white
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
@@ -96,7 +94,7 @@ class _CartScreenState extends State<cartScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.list_alt),
+              icon: Icon(Icons.history),
               onPressed: () {
                 Navigator.push(
                   context,

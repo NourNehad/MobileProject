@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:test/LoginScreen.dart';
 import 'package:test/profile.dart';
 import 'package:test/vendor/requestVendorScreen.dart';
- class MyDrawer extends StatelessWidget {
 
+class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -11,37 +11,43 @@ import 'package:test/vendor/requestVendorScreen.dart';
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            // Your drawer header content here
-            child: Text('Jewlarria'),
+            child: Text(
+              'Jewellerria',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 133, 187, 232),
+              color: Colors.green,
             ),
           ),
           ListTile(
             title: Text('Profile'),
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen()),
-                );
+                context,
+                MaterialPageRoute(builder: (context) => profileScreen()),
+              );
             },
           ),
           ListTile(
             title: Text('Create Vendor Account'),
             onTap: () {
-               Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => requestVendorScreen()),
-                );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => requestVendorScreen()),
+              );
             },
           ),
-           ListTile(
+          ListTile(
             title: Text('Log Out'),
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => loginScreen()),
-                );
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
             },
           ),
           // Add more ListTile widgets for additional items
@@ -50,6 +56,3 @@ import 'package:test/vendor/requestVendorScreen.dart';
     );
   }
 }
-
-
-

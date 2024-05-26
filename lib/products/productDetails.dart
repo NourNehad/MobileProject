@@ -3,15 +3,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:test/cart/cartProvider.dart';
+import 'package:test/vendor/vendorProvider.dart';
 
 class productDetails extends StatelessWidget {
   final String productId;
   final TextEditingController _commentController = TextEditingController();
+  String username ='';
 
   productDetails({required this.productId});
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<VendorProvider>(context);
+     bool isAuth = authProvider.isAuth;
+     username = authProvider.username;
+
     final CartProvider = Provider.of<cartProvider>(context, listen: false);
 
     return Scaffold(
@@ -77,7 +83,17 @@ class productDetails extends StatelessWidget {
                   children: [
                     StarRating(
                       rating: averageRating,
-                      onRatingChanged: (rating) => addRating(productId, rating),
+                      onRatingChanged: (rating) {
+                        if (isAuth) {
+                          addRating(productId, rating, product['title']);
+                        } else {
+
+                        
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('You must be logged in to rate.')),
+                          );
+                        }
+                      },
                     ),
                     SizedBox(width: 10),
                     Text(
@@ -112,7 +128,7 @@ class productDetails extends StatelessWidget {
                 SizedBox(height: 16),
                 Divider(),
                 Expanded(
-                  child: CommentsSection(productId: productId),
+                  child: CommentsSection(productId: productId, isAuth: isAuth , productTitle:  product['title']),
                 ),
               ],
             ),
@@ -122,23 +138,40 @@ class productDetails extends StatelessWidget {
     );
   }
 
-  void addRating(String productId, double rating) async {
+    void addRating(String productId, double rating, String productTitle) async {
     final productRef = FirebaseFirestore.instance.collection('products').doc(productId);
 
     await productRef.update({
       'ratings': FieldValue.arrayUnion([rating])
     });
+    print(username);
+    var currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      var notificationMessage = '${username} rated $productTitle';
+
+      // Add notification to Firestore
+      FirebaseFirestore.instance.collection('notifications').add({
+        'message': notificationMessage,
+        'timestamp': DateTime.now(),
+      });
+    }
   }
 }
 
 class CommentsSection extends StatelessWidget {
   final String productId;
+  final bool isAuth;
+  final String productTitle;
   final TextEditingController _commentController = TextEditingController();
+  String username ='';
 
-  CommentsSection({required this.productId});
+  CommentsSection({required this.productId, required this.isAuth, required this.productTitle});
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<VendorProvider>(context);
+     bool isAuth = authProvider.isAuth;
+     username = authProvider.username;
     var currentUser = FirebaseAuth.instance.currentUser;
 
     return Column(
@@ -199,14 +232,21 @@ class CommentsSection extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.send),
                 onPressed: () {
-                  if (_commentController.text.isNotEmpty) {
-                    addComment(
-                      productId,
-                      currentUser!.uid,
-                      currentUser.displayName ?? 'Anonymous',
-                      _commentController.text,
+                  if (isAuth) {
+                    if (_commentController.text.isNotEmpty) {
+                      addComment(
+                        productId,
+                        currentUser!.uid,
+                        username,
+                        _commentController.text ,
+
+                      );
+                      _commentController.clear();
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('You must be logged in to comment.')),
                     );
-                    _commentController.clear();
                   }
                 },
               ),
@@ -223,6 +263,14 @@ class CommentsSection extends StatelessWidget {
       'username': username,
       'comment': comment,
       'timestamp': Timestamp.now(),
+    });
+
+    var notificationMessage = '$username commented on $productTitle';
+
+    // Add notification to Firestore
+    FirebaseFirestore.instance.collection('notifications').add({
+      'message': notificationMessage,
+      'timestamp': DateTime.now(),
     });
   }
 }
