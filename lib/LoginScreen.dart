@@ -1,14 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:test/products/allProducts.dart';
 
 class loginScreen extends StatefulWidget {
+=======
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test/products/allProducts.dart';
+
+class LoginScreen extends StatefulWidget {
+>>>>>>> 834fbfc507b8d0c8a1913f57f6bbf0eea39b37fa
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+<<<<<<< HEAD
 class _LoginScreenState extends State<loginScreen> {
+=======
+class _LoginScreenState extends State<LoginScreen> {
+>>>>>>> 834fbfc507b8d0c8a1913f57f6bbf0eea39b37fa
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var usernameController = TextEditingController();
@@ -18,6 +29,7 @@ class _LoginScreenState extends State<loginScreen> {
   var authenticationMode = 0;
 
   void toggleAuthMode() {
+<<<<<<< HEAD
     if (authenticationMode == 0) {
       setState(() {
         authenticationMode = 1;
@@ -29,6 +41,25 @@ class _LoginScreenState extends State<loginScreen> {
     }
   }
 
+=======
+    setState(() {
+      authenticationMode = authenticationMode == 0 ? 1 : 0;
+    });
+  }
+
+  Future<void> saveUserCredentials(User user) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userId', user.uid);
+    await prefs.setString('email', user.email ?? '');
+  }
+
+  Future<void> clearUserCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userId');
+    await prefs.remove('email');
+  }
+
+>>>>>>> 834fbfc507b8d0c8a1913f57f6bbf0eea39b37fa
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +111,11 @@ class _LoginScreenState extends State<loginScreen> {
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
+<<<<<<< HEAD
                   loginORsignup();
+=======
+                  loginOrSignup();
+>>>>>>> 834fbfc507b8d0c8a1913f57f6bbf0eea39b37fa
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -93,6 +128,7 @@ class _LoginScreenState extends State<loginScreen> {
                 ),
               ),
               const SizedBox(height: 16),
+<<<<<<< HEAD
               const Center(
                 child: Text(
                   "Or sign in with",
@@ -127,6 +163,33 @@ class _LoginScreenState extends State<loginScreen> {
                   child: Text("Continue as Guest"),
                 ),
               ),
+=======
+              TextButton(
+                onPressed: () {
+                  toggleAuthMode();
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.green,
+                ),
+                child: Text(authenticationMode == 1 ? "Login instead" : "Sign up instead"),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  _signInAnonymously(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  textStyle: TextStyle(fontSize: 16),
+                ),
+                child: Center(
+                  child: Text("Continue as Guest"),
+                ),
+              ),
+>>>>>>> 834fbfc507b8d0c8a1913f57f6bbf0eea39b37fa
             ],
           ),
         ),
@@ -134,7 +197,11 @@ class _LoginScreenState extends State<loginScreen> {
     );
   }
 
+<<<<<<< HEAD
   void loginORsignup() async {
+=======
+  void loginOrSignup() async {
+>>>>>>> 834fbfc507b8d0c8a1913f57f6bbf0eea39b37fa
     var email = emailController.text.trim();
     var password = passwordController.text.trim();
     var username = usernameController.text.trim();
@@ -155,6 +222,13 @@ class _LoginScreenState extends State<loginScreen> {
           'email': email,
           'isVendor': isVendor,
         });
+<<<<<<< HEAD
+=======
+
+        if (authResult.user != null) {
+          await saveUserCredentials(authResult.user!);
+        }
+>>>>>>> 834fbfc507b8d0c8a1913f57f6bbf0eea39b37fa
       } else // log in
       {
         authResult = await authenticationInstance.signInWithEmailAndPassword(
@@ -162,6 +236,13 @@ class _LoginScreenState extends State<loginScreen> {
           password: password,
         );
 
+<<<<<<< HEAD
+=======
+        if (authResult.user != null) {
+          await saveUserCredentials(authResult.user!);
+        }
+
+>>>>>>> 834fbfc507b8d0c8a1913f57f6bbf0eea39b37fa
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => allProducts()),
@@ -218,4 +299,30 @@ class _LoginScreenState extends State<loginScreen> {
       );
     }
   }
+<<<<<<< HEAD
+=======
+
+  void _signInAnonymously(BuildContext context) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
+      if (userCredential.user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Signed in anonymously: ${userCredential.user!.uid}')),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => allProducts()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to sign in anonymously')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error during anonymous sign-in: $e')),
+      );
+    }
+  }
+>>>>>>> 834fbfc507b8d0c8a1913f57f6bbf0eea39b37fa
 }

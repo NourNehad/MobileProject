@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'profile.dart';
 class RequestVendorScreen extends StatefulWidget {
   @override
   _RequestVendorScreenState createState() => _RequestVendorScreenState();
@@ -87,3 +87,64 @@ class _RequestVendorScreenState extends State<RequestVendorScreen> {
     );
   }
 }
+
+class ShopperBottomNavBar extends StatelessWidget {
+const ShopperBottomNavBar({super.key});
+
+  @override
+Widget build(BuildContext context) {
+  return Stack(
+    children: [
+      Positioned(
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: Container(
+          height: 86.0, // Standard height for BottomAppBar
+          child: BottomAppBar(
+            shape: const CircularNotchedRectangle(),
+            notchMargin: 8.0,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Flexible(
+                  child: BottomNavigationBar(
+                    items: const [
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.shopping_basket),
+                        label: 'Cart',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.person),
+                        label: 'Profile',
+                      ),
+                    ],
+                    onTap: (index) {
+          switch (index) {
+            case 0:
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => StockScreen()),
+              // );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => profileScreen()),
+              );
+              break;
+          }
+                    }
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+}
+

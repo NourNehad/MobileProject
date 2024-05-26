@@ -27,9 +27,9 @@ class MyDrawer extends StatelessWidget {
             title: Text('Profile'),
             onTap: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()),
-              );
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileScreen()),
+                );
             },
           ),
           ListTile(
@@ -45,9 +45,9 @@ class MyDrawer extends StatelessWidget {
             title: Text('Log Out'),
             onTap: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => loginScreen()),
-              );
+                  context,
+                  MaterialPageRoute(builder: (context) => loginScreen()),
+                );
             },
           ),
           // Add more ListTile widgets for additional items
@@ -56,3 +56,6 @@ class MyDrawer extends StatelessWidget {
     );
   }
 }
+
+
+

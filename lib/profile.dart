@@ -2,12 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatefulWidget {
+class profileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
+<<<<<<< HEAD
 class _ProfileScreenState extends State<ProfileScreen> {
+=======
+class _ProfileScreenState extends State<profileScreen> {
+>>>>>>> 834fbfc507b8d0c8a1913f57f6bbf0eea39b37fa
   User? _currentUser;
   DocumentSnapshot? _userSnapshot;
   bool _isVendor = false;
