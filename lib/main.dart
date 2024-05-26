@@ -64,36 +64,32 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => VendorProvider()),
         ChangeNotifierProvider(create: (_) => cartProvider()),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: Scaffold(
-          body: _error
-              ? errorScreen()
-              : !_initialized
-                  ? loadingScreen()
-                  : StreamBuilder(
-                      stream: FirebaseAuth.instance.authStateChanges(),
-                      builder: (ctx, userSnapshot) {
-                        if (userSnapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return loadingScreen();
-                        }
-                        if (userSnapshot.hasData) {
-                          return allProducts();
-                        }
-                        return loginScreen();
-                      },
-                    ),
-        ),
-        routes: {
-          '/cart': (context) => cartScreen(),
-          '/allProducts': (context) => allProducts(),
-          '/productScreen': (context) => productScreen(),
-        },
-      ),
-    );
-  }
+
+  child : MaterialApp(
+    title: 'Flutter Demo',
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+    ),
+    home: Scaffold(
+      body: _error
+          ? errorScreen()
+          : !_initialized
+              ? loadingScreen()
+              : StreamBuilder(
+                  stream: FirebaseAuth.instance.authStateChanges(),
+                  builder: (ctx, userSnapshot) {
+                    if (userSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return loadingScreen();
+                    }
+                    if (userSnapshot.hasData) {
+                      return allProducts();
+                    }
+                    return loginScreen();
+                  },
+                ),
+    ),
+  )
+  );
+}
 }

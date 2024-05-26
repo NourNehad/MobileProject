@@ -34,7 +34,8 @@ class _RequestVendorScreenState extends State<requestVendorScreen> {
       });
 
       if (isVendor) {
-        var vendorDoc = await _firestore.collection('vendors').doc(user.uid).get();
+        var vendorDoc =
+            await _firestore.collection('vendors').doc(user.uid).get();
         setState(() {
           vendorData = vendorDoc.data();
         });
@@ -115,7 +116,9 @@ class _RequestVendorScreenState extends State<requestVendorScreen> {
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('Vendor Profile', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text('Vendor Profile',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 10),
                   Text('Name: ${vendorData?['name']}'),
                   Text('Email: ${vendorData?['email']}'),
@@ -141,6 +144,10 @@ class _RequestVendorScreenState extends State<requestVendorScreen> {
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      textStyle: const TextStyle(color: Colors.white),
+                    ),
                     onPressed: requestToBecomeVendor,
                     child: Text("Request Vendor Status"),
                   ),

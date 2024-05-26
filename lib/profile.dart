@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:test/products/allProducts.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -9,9 +8,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late User? _currentUser;
-  late DocumentSnapshot _userSnapshot;
-  late  bool _isVendor;
+  User? _currentUser;
+  DocumentSnapshot? _userSnapshot;
+  bool _isVendor = false;
 
   @override
   void initState() {
@@ -29,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
       setState(() {
         _isVendor = userData['isVendor'] ?? false;
-         _userSnapshot = userSnapshot;
+        _userSnapshot = userSnapshot;
       });
     }
   }
@@ -39,23 +38,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
+        centerTitle: true, // Center the title
+        backgroundColor: Colors.green, // Set the AppBar color to green
+        iconTheme: IconThemeData(color: Colors.white), // Set the back button color to white
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), // Set the title text to white
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Display user image (Placeholder for now)
+            SizedBox(height: 20),
             Center(
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/user_placeholder.png'),
-                // You can replace 'assets/user_placeholder.png' with your image path
+                backgroundColor: Colors.green[200], // Update the background color
+                // You can replace this with the actual image path
               ),
             ),
             SizedBox(height: 20),
             // Display user email and username
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+            Container(
+              color: Colors.grey[200], // Set background color to grey
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -65,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Username: ${_userSnapshot != null ? _userSnapshot['username'] ?? "N/A" : "N/A"}',
+                    'Username: ${_userSnapshot != null ? _userSnapshot!['username'] ?? "N/A" : "N/A"}',
                     style: TextStyle(fontSize: 18),
                   ),
                 ],
@@ -74,22 +80,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: 20),
             // Button to display products or orders based on user type
             Center(
-              child: _isVendor
-                  ? ElevatedButton(
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => MyProductsScreen()),
-                        // );
-                      },
-                      child: Text('My Products'),
-                    )
-                  : ElevatedButton(
-                      onPressed: () {
-                        // Navigate to My Orders Screen
-                      },
-                      child: Text('My Orders'),
-                    ),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Implement navigation based on user type
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[400], // Set button color to grey
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: Text(
+                  _isVendor ? 'My Products' : 'My Orders',
+                  style: TextStyle(color: Colors.white), // Set text color to white
+                ),
+              ),
             ),
           ],
         ),

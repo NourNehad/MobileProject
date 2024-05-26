@@ -37,7 +37,10 @@ class productDetails extends StatelessWidget {
         ],
       ),
       body: FutureBuilder(
-        future: FirebaseFirestore.instance.collection('products').doc(productId).get(),
+        future: FirebaseFirestore.instance
+            .collection('products')
+            .doc(productId)
+            .get(),
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -62,7 +65,8 @@ class productDetails extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Image.network(product['imageUrl'], height: 200, fit: BoxFit.cover),
+                Image.network(product['imageUrl'],
+                    height: 200, fit: BoxFit.cover),
                 SizedBox(height: 16),
                 Text(
                   product['title'],
@@ -82,7 +86,8 @@ class productDetails extends StatelessWidget {
                     SizedBox(width: 10),
                     Text(
                       averageRating.toStringAsFixed(1),
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -92,21 +97,27 @@ class productDetails extends StatelessWidget {
                   children: [
                     Text(
                       "\$${product['price']}",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                    ElevatedButton.icon(
+                    ElevatedButton(
                       onPressed: () {
                         CartProvider.addToCart(productId);
                         Navigator.pushNamed(context, '/cart');
                       },
-                      icon: Icon(Icons.add_shopping_cart),
-                      label: Text("Add to Cart"),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        textStyle: TextStyle(fontSize: 18),
+                        backgroundColor: Colors.green,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       ),
-                    ),
+                      child: Center(
+                        child: Icon(
+                          Icons.add_shopping_cart,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 SizedBox(height: 16),
@@ -119,6 +130,157 @@ class productDetails extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  void addRating(String productId, double rating) async {
+    final productRef =
+        FirebaseFirestore.instance.collection('products').doc(productId);
+
+    await productRef.update({
+      'ratings': FieldValue.arrayUnion([rating])
+    });
+  }
+}
+
+class CommentsSection extends StatelessWidget {
+  final String productId;
+  final TextEditingController _commentController = TextEditingController();
+
+  CommentsSection({required this.productId});
+
+  @override
+  Widget build(BuildContext context) {
+    var currentUser = FirebaseAuth.instance.currentUser;
+
+    return Column(
+      children: [
+        Expanded(
+          child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('products')
+                .doc(productId)
+                .collection('comments')
+                .orderBy('timestamp', descending: true)
+                .snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return Center(child: Text('No comments yet'));
+              }
+
+              var comments = snapshot.data!.docs;
+
+              return ListView.builder(
+                itemCount: comments.length,
+                itemBuilder: (context, index) {
+                  var comment = comments[index].data() as Map<String, dynamic>;
+                  return ListTile(
+                    title: Text(comment['username']),
+                    subtitle: Text(comment['comment']),
+                    trailing: Text(
+                      (comment['timestamp'] as Timestamp).toDate().toString(),
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _commentController,
+                  decoration: InputDecoration(
+                    hintText: 'Add a comment...',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.send),
+                onPressed: () {
+                  if (_commentController.text.isNotEmpty) {
+                    addComment(
+                      productId,
+                      currentUser!.uid,
+                      currentUser.displayName ?? 'Anonymous',
+                      _commentController.text,
+                    );
+                    _commentController.clear();
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void addComment(
+      String productId, String userId, String username, String comment) async {
+    await FirebaseFirestore.instance
+        .collection('products')
+        .doc(productId)
+        .collection('comments')
+        .add({
+      'userId': userId,
+      'username': username,
+      'comment': comment,
+      'timestamp': Timestamp.now(),
+    });
+  }
+}
+
+class StarRating extends StatefulWidget {
+  final double rating;
+  final Function(double rating) onRatingChanged;
+
+  StarRating({required this.rating, required this.onRatingChanged});
+
+  @override
+  _StarRatingState createState() => _StarRatingState();
+}
+
+class _StarRatingState extends State<StarRating> {
+  late double _currentRating;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentRating = widget.rating;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(5, (index) {
+        return IconButton(
+          icon: Icon(
+            index < _currentRating ? Icons.star : Icons.star_border,
+          ),
+          color: Colors.amber,
+          onPressed: () {
+            setState(() {
+              _currentRating = index + 1.0;
+            });
+            widget.onRatingChanged(_currentRating);
+          },
+        );
+      }),
     );
   }
 }
