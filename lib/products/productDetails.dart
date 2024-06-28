@@ -1,11 +1,9 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:test/cart/cartProvider.dart';
 import 'package:test/vendor/vendorProvider.dart';
-import 'package:test/notification_service_stub.dart';
 
 class productDetails extends StatelessWidget {
   final String productId;
@@ -272,20 +270,9 @@ class CommentsSection extends StatelessWidget {
       'timestamp': DateTime.now(),
     });
 
-    // Send push notification
-    sendPushNotification(notificationMessage);
+  
   }
 
-  void sendPushNotification(String message) {
-    AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
-        channelKey: 'basic_channel',
-        title: 'New Comment',
-        body: message,
-      ),
-    );
-  }
 }
 
 class StarRating extends StatefulWidget {

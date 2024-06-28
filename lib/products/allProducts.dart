@@ -285,7 +285,7 @@ class _AllProductsState extends State<allProducts> {
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: vendorProvider.isAuth ? VendorBottomNavBar() : null,
+      bottomNavigationBar: vendorProvider.isVendor ? VendorBottomNavBar() : null,
     );
   }
 }

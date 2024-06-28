@@ -9,14 +9,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.34"
-  args:
-    dependency: transitive
-    description:
-      name: args
-      sha256: "7cf60b9f0cc88203c5a190b4cd62a99feea42759a7fa695010eb5de1c0b2252a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.5.0"
   async:
     dependency: transitive
     description:
@@ -25,14 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  awesome_notifications:
-    dependency: "direct main"
-    description:
-      name: awesome_notifications
-      sha256: "0c055bdbc88140252256603f95d01ffa4aeacff2c10d5a4a4beb226503452919"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.6+12"
   boolean_selector:
     dependency: transitive
     description:
@@ -105,14 +89,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
-  dbus:
-    dependency: transitive
-    description:
-      name: dbus
-      sha256: "365c771ac3b0e58845f39ec6deebc76e3276aa9922b0cc60840712094d9047ac"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.10"
   fake_async:
     dependency: transitive
     description:
@@ -169,6 +145,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+1"
+  firebase_app_check:
+    dependency: "direct main"
+    description:
+      name: firebase_app_check
+      sha256: ea050dc4abccb6c46610c9a8cc0e72eabcf5ade8e84f5d580d988e5ad2e3ddbc
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2+6"
+  firebase_app_check_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_app_check_platform_interface
+      sha256: b1ea7152bdf7907f2ba78b64aecdd48a3ae08cffef5dab1667414fd274e52f22
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0+28"
+  firebase_app_check_web:
+    dependency: transitive
+    description:
+      name: firebase_app_check_web
+      sha256: "8bd316e66c2e4a7da00718eb96dc3b04d7b3122681a30ce6e5a1833c9d409a3a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2+6"
   firebase_auth:
     dependency: "direct main"
     description:
@@ -278,30 +278,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
-  flutter_local_notifications:
-    dependency: "direct main"
-    description:
-      name: flutter_local_notifications
-      sha256: "40e6fbd2da7dcc7ed78432c5cdab1559674b4af035fddbfb2f9a8f9c2112fcef"
-      url: "https://pub.dev"
-    source: hosted
-    version: "17.1.2"
-  flutter_local_notifications_linux:
-    dependency: transitive
-    description:
-      name: flutter_local_notifications_linux
-      sha256: "33f741ef47b5f63cc7f78fe75eeeac7e19f171ff3c3df054d84c1e38bedb6a03"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.0+1"
-  flutter_local_notifications_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_local_notifications_platform_interface
-      sha256: "340abf67df238f7f0ef58f4a26d2a83e1ab74c77ab03cd2b2d5018ac64db30b7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.1.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -568,14 +544,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.2"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.27.7"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -685,14 +653,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.0"
-  timezone:
-    dependency: transitive
-    description:
-      name: timezone
-      sha256: a6ccda4a69a442098b602c44e61a1e2b4bf6f5516e875bbf0f427d5df14745d5
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.3"
   typed_data:
     dependency: transitive
     description:

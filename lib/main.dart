@@ -12,22 +12,21 @@ import 'package:test/vendor/vendorProvider.dart';
 import 'cart/cartScreen.dart';
 import 'errorHandling/errorScreen.dart';
 import 'package:test/firebase_options.dart';
-import 'package:test/drawer_wrapper.dart';
 import 'cart/cartProvider.dart';
-import 'notification_service_stub.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print('Handling a background message: ${message.messageId}');
-}
+
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   await Firebase.initializeApp();
+//   print('Handling a background message: ${message.messageId}');
+// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  initializeNotifications();
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // initializeNotifications();
   runApp(MyApp());
 }
 
@@ -61,7 +60,7 @@ class _MyAppState extends State<MyApp> {
 
         if (message.notification != null) {
           print('Message also contained a notification: ${message.notification}');
-          sendPushNotification(message.notification!.body ?? 'New Notification');
+         // sendPushNotification(message.notification!.body ?? 'New Notification');
         }
       });
 
@@ -77,7 +76,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initializeFlutterFire();
-    requestNotificationPermission();
+  //  requestNotificationPermission();
   }
 
   Future<bool> checkLoginStatus() async {
